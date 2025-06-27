@@ -1,6 +1,6 @@
 using OrderManagment.DataAccess.Entities;
 
-namespace OrderManagment.BusinessLogic.Interfaces;
+namespace OrderManagment.DataAccess.Interfaces;
 
 public interface IOrderRepository
 {

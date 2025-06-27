@@ -5,11 +5,11 @@ namespace OrderManagment.DataAccess.Entities;
 public class ProductEntity
 {
     [Key]
-    public required int Id { get; set; }
+    public int Id { get; set; }
 
     [Required]
-    public required string Name { get; set; }
+    public required string Name { get; set; } = null!;
 
     [Required]
-    public required decimal Price { get; set; }
+    public decimal Price { get; set; }
 }

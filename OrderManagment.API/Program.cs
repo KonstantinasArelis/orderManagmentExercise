@@ -1,9 +1,18 @@
 using Microsoft.EntityFrameworkCore;
 using OrderManagment.DataAccess.Context;
+using OrderManagment.BusinessLogic.Profiles;
+using OrderManagment.DataAccess.Interfaces;
+using OrderManagment.DataAccess.Repositories;
+using OrderManagment.BusinessLogic.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddAutoMapper(typeof(ProductProfile).Assembly);
+
+builder.Services.AddTransient<IProductRepository, ProductRepository>();
+builder.Services.AddTransient<IProductService, ProductService>();
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -21,5 +30,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapControllers();
 
 app.Run();
