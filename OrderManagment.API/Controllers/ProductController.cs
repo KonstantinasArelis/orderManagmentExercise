@@ -26,4 +26,16 @@ public class ProductController : ControllerBase
         CreateProductResponse response = productService.CreateProduct(request);
         return CreatedAtAction(nameof(CreateProduct), new { id = response.Id }, response);
     }
+
+    [HttpGet("search/{name}")]
+    public IActionResult SearchProducts([FromRoute] String name)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        ICollection<RetrieveProductResponse> responses = productService.GetProducts(name);
+        return Ok(responses);
+    }
 }

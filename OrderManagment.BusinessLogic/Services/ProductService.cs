@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using AutoMapper;
 using OrderManagment.Contracts.Discount;
 using OrderManagment.Contracts.Product;
@@ -24,9 +25,15 @@ public class ProductService : IProductService
         return mapper.Map<CreateProductResponse>(createdProduct);
     }
 
-    public List<RetrieveProductResponse> GetProducts(RetrieveProductsRequest request)
+    public ICollection<RetrieveProductResponse> GetProducts(String productName)
     {
-        throw new NotImplementedException();
+        ICollection<ProductEntity> productEntities = productRepository.RetrieveProducts(productName);
+        ICollection<RetrieveProductResponse> productResponses = new Collection<RetrieveProductResponse>();
+        foreach (ProductEntity productEntity in productEntities)
+        {
+            productResponses.Add(mapper.Map<RetrieveProductResponse>(productEntity));
+        }
+        return productResponses;
     }
 
     public void ApplyDiscountRequest(ApplyDiscountRequest request)

@@ -21,12 +21,16 @@ public class ProductRepository : IProductRepository
         return product;
     }
 
-    public IReadOnlyCollection<ProductEntity> RetrieveProducts(String productName)
+    public ICollection<ProductEntity> RetrieveProducts(String productName)
     {
-        throw new NotImplementedException();
+        ICollection<ProductEntity> products = context.Products
+            .Where(p => p.Name.Contains(productName))
+            .ToList();
+
+        return products;
     }
 
-    public IReadOnlyCollection<ProductEntity> RetrieveDiscountedProducts()
+    public ICollection<ProductEntity> RetrieveDiscountedProducts()
     {
         throw new NotImplementedException();
     }
