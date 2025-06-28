@@ -30,6 +30,17 @@ public class ProductRepository : IProductRepository
         return products;
     }
 
+    public ProductEntity? GetProduct(int id)
+    {
+        return context.Products.FirstOrDefault(p => p.Id == id);
+    }
+
+    public void UpdateProduct(ProductEntity product)
+    {
+        context.Update(product);
+        context.SaveChanges();
+    }
+
     public ICollection<ProductEntity> RetrieveDiscountedProducts()
     {
         throw new NotImplementedException();

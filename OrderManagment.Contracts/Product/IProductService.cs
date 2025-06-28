@@ -8,5 +8,5 @@ public interface IProductService
 {
     public CreateProductResponse CreateProduct(CreateProductRequest request);
     public ICollection<RetrieveProductResponse> GetProducts(String productName);
-    public void ApplyDiscountRequest(ApplyDiscountRequest request);
+    public ApplyDiscountResponse ApplyDiscount(int productId, ApplyDiscountRequest request);
 }

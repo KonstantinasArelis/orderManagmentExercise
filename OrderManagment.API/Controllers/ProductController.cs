@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using OrderManagment.BusinessLogic.Interfaces;
+using OrderManagment.Contracts.Discount;
 using OrderManagment.Contracts.Product;
 
 namespace OrderManagment.API.Controllers;
@@ -37,5 +38,17 @@ public class ProductController : ControllerBase
 
         ICollection<RetrieveProductResponse> responses = productService.GetProducts(name);
         return Ok(responses);
+    }
+
+    [HttpPost("applyDiscount/{id}")]
+    public IActionResult ApplyDiscount([FromRoute] int id, [FromBody] ApplyDiscountRequest request)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        ApplyDiscountResponse response = productService.ApplyDiscount(id, request);
+        return Ok(response);
     }
 }

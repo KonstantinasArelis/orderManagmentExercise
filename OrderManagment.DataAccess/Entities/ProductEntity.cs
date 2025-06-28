@@ -12,4 +12,8 @@ public class ProductEntity
 
     [Required]
     public decimal Price { get; set; }
+
+    public decimal? DiscountPercentage { get; set; }
+
+    public int? DiscountMinimumProductCount { get; set; }
 }

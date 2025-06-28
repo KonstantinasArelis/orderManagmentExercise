@@ -36,8 +36,13 @@ public class ProductService : IProductService
         return productResponses;
     }
 
-    public void ApplyDiscountRequest(ApplyDiscountRequest request)
+    public ApplyDiscountResponse ApplyDiscount(int productId, ApplyDiscountRequest request)
     {
-        throw new NotImplementedException();
+        ProductEntity product = productRepository.GetProduct(productId) ?? throw new KeyNotFoundException();
+        product.DiscountMinimumProductCount = request.DiscountMinimumProductCount;
+        product.DiscountPercentage = request.DiscountPercentage;
+
+        productRepository.UpdateProduct(product);
+        return mapper.Map<ApplyDiscountResponse>(productRepository.GetProduct(productId));
     }
 }
