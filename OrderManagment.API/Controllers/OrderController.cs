@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OrderManagment.BusinessLogic.Interfaces;
 using OrderManagment.BusinessLogic.Service;
+using OrderManagment.Contracts.Invoice;
 using OrderManagment.Contracts.Order;
 
 namespace OrderManagment.API.Controllers;
@@ -33,5 +34,18 @@ public class OrderController : ControllerBase
         ICollection<RetrieveOrderResponse> responses = orderService.RetrieveOrders();
 
         return Ok(responses);
+    }
+
+    [HttpGet("invoice/{id}")]
+    public IActionResult GetOrderInvoice([FromRoute] int id)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        OrderInvoiceResponse response = orderService.GetOrderInvoice(id);
+
+        return Ok(response);
     }
 }

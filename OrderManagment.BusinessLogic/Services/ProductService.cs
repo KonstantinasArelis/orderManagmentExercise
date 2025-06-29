@@ -54,29 +54,29 @@ public class ProductService : IProductService
         ICollection<ProductDiscountReportResponse> reports = new Collection<ProductDiscountReportResponse>();
 
         foreach (ProductEntity productEntity in discountedProducts)
+        {
+            decimal TotalAmountWithoutDiscount = 0;
+            decimal TotalAmountWithDiscount = 0;
+
+            foreach (OrderItemEntity orderItemEntity in productEntity.OrderItems)
             {
-                decimal TotalAmountWithoutDiscount = 0;
-                decimal TotalAmountWithDiscount = 0;
-
-                foreach (OrderItemEntity orderItemEntity in productEntity.OrderItems)
-                {
-                    TotalAmountWithoutDiscount += productEntity.Price * orderItemEntity.Quantity;
-                    TotalAmountWithDiscount += orderItemEntity.Quantity >= productEntity.DiscountMinimumProductCount
-                        ? productEntity.Price * orderItemEntity.Quantity * (1 - productEntity.DiscountPercentage / 100 ?? throw new Exception())
-                        : productEntity.Price * orderItemEntity.Quantity;
-                }
-
-                reports.Add(
-                    new ProductDiscountReportResponse()
-                    {
-                        Name = productEntity.Name,
-                        Discount = productEntity.DiscountPercentage ?? throw new Exception(),
-                        NumberOfOrders = productEntity.OrderItems.Count,
-                        TotalAmountWithoutDiscount = TotalAmountWithoutDiscount,
-                        TotalAmountWithDiscount = TotalAmountWithDiscount,
-                    }
-                );
+                TotalAmountWithoutDiscount += productEntity.Price * orderItemEntity.Quantity;
+                TotalAmountWithDiscount += orderItemEntity.Quantity >= productEntity.DiscountMinimumProductCount
+                    ? productEntity.Price * orderItemEntity.Quantity * (1 - productEntity.DiscountPercentage / 100 ?? throw new Exception())
+                    : productEntity.Price * orderItemEntity.Quantity;
             }
+
+            reports.Add(
+                new ProductDiscountReportResponse()
+                {
+                    Name = productEntity.Name,
+                    Discount = productEntity.DiscountPercentage ?? throw new Exception(),
+                    NumberOfOrders = productEntity.OrderItems.Count,
+                    TotalAmountWithoutDiscount = TotalAmountWithoutDiscount,
+                    TotalAmountWithDiscount = TotalAmountWithDiscount,
+                }
+            );
+        }
 
         return reports;
     }
@@ -93,7 +93,7 @@ public class ProductService : IProductService
                 ? productEntity.Price * orderItemEntity.Quantity * (1 - productEntity.DiscountPercentage / 100 ?? throw new Exception())
                 : productEntity.Price * orderItemEntity.Quantity;
         }
-        
+
         ProductDiscountReportResponse response = new ProductDiscountReportResponse()
         {
             Name = productEntity.Name,

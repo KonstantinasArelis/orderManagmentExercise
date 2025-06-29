@@ -8,5 +8,5 @@ public interface IOrderService
 {
     public CreateOrderResponse CreateOrder(CreateOrderRequest request);
     public ICollection<RetrieveOrderResponse> RetrieveOrders();
-    public InvoiceDto GetOrderInvoice(int OrderId);
+    public OrderInvoiceResponse GetOrderInvoice(int OrderId);
 }

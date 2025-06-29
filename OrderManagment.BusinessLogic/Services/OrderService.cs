@@ -36,8 +36,37 @@ public class OrderService : IOrderService
         return orderResponses;
     }
 
-    public InvoiceDto GetOrderInvoice(int OrderId)
+    public OrderInvoiceResponse GetOrderInvoice(int OrderId)
     {
-        throw new NotImplementedException();
+        OrderEntity orderEntity = orderRepository.RetrieveOrder(OrderId) ?? throw new KeyNotFoundException();
+        ICollection<OrderInvoiceOrderItemResponse> orderInvoiceOrderItemResponses = new Collection<OrderInvoiceOrderItemResponse>();
+        decimal OrderAmount = 0;
+        foreach (OrderItemEntity itemEntity in orderEntity.Items)
+        {
+            OrderInvoiceOrderItemResponse orderItemResponse = new OrderInvoiceOrderItemResponse()
+            {
+                Name = itemEntity.Product.Name,
+                Quantity = itemEntity.Quantity,
+                Amount = itemEntity.Quantity * itemEntity.Product.Price,
+            };
+
+            if (itemEntity.Quantity >= itemEntity.Product.DiscountMinimumProductCount)
+            {
+                orderItemResponse.Discount = itemEntity.Product.DiscountPercentage ?? throw new Exception();
+            }
+
+            OrderAmount += (decimal)(orderItemResponse.Discount != null
+                ? orderItemResponse.Amount * (1 - orderItemResponse.Discount / 100)
+                : orderItemResponse.Amount);
+
+            orderInvoiceOrderItemResponses.Add(orderItemResponse);
+        }
+        OrderInvoiceResponse response = new OrderInvoiceResponse()
+        {
+            Items = orderInvoiceOrderItemResponses,
+            OrderAmount = OrderAmount,
+        };
+
+        return response;
     }
 }

@@ -38,8 +38,12 @@ public class OrderRepository : IOrderRepository
         throw new NotImplementedException();
     }
 
-    public OrderEntity RetrieveOrder(int orderId)
+    public OrderEntity? RetrieveOrder(int orderId)
     {
-        throw new NotImplementedException();
+        return context.Orders
+            .Where(o => o.Id == orderId)
+            .Include(o => o.Items)
+                .ThenInclude(item => item.Product)
+            .FirstOrDefault();
     }
 }
