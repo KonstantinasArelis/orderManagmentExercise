@@ -40,7 +40,7 @@ public class ProductService : IProductService
 
     public ApplyDiscountResponse ApplyDiscount(int productId, ApplyDiscountRequest request)
     {
-        ProductEntity product = productRepository.GetProduct(productId) ?? throw new KeyNotFoundException();
+        ProductEntity product = productRepository.GetProduct(productId) ?? throw new KeyNotFoundException($"Product with id {productId} was not found");
         product.DiscountMinimumProductCount = request.DiscountMinimumProductCount;
         product.DiscountPercentage = request.DiscountPercentage;
 
@@ -62,7 +62,7 @@ public class ProductService : IProductService
             {
                 TotalAmountWithoutDiscount += productEntity.Price * orderItemEntity.Quantity;
                 TotalAmountWithDiscount += orderItemEntity.Quantity >= productEntity.DiscountMinimumProductCount
-                    ? productEntity.Price * orderItemEntity.Quantity * (1 - productEntity.DiscountPercentage / 100 ?? throw new Exception())
+                    ? productEntity.Price * orderItemEntity.Quantity * (1 - productEntity.DiscountPercentage / 100 ?? throw new InvalidOperationException("Discounted product discount is null"))
                     : productEntity.Price * orderItemEntity.Quantity;
             }
 
@@ -70,7 +70,7 @@ public class ProductService : IProductService
                 new ProductDiscountReportResponse()
                 {
                     Name = productEntity.Name,
-                    Discount = productEntity.DiscountPercentage ?? throw new Exception(),
+                    Discount = productEntity.DiscountPercentage ?? throw new InvalidOperationException("Discounted product discount is null"),
                     NumberOfOrders = productEntity.OrderItems.Count,
                     TotalAmountWithoutDiscount = TotalAmountWithoutDiscount,
                     TotalAmountWithDiscount = TotalAmountWithDiscount,
@@ -83,21 +83,21 @@ public class ProductService : IProductService
 
     public ProductDiscountReportResponse GetProductDiscountReport(int productId)
     {
-        ProductEntity productEntity = productRepository.GetProduct(productId) ?? throw new KeyNotFoundException();
+        ProductEntity productEntity = productRepository.GetProduct(productId) ?? throw new KeyNotFoundException($"Product with id {productId} was not found");
         decimal TotalAmountWithoutDiscount = 0;
         decimal TotalAmountWithDiscount = 0;
         foreach (OrderItemEntity orderItemEntity in productEntity.OrderItems)
         {
             TotalAmountWithoutDiscount += productEntity.Price * orderItemEntity.Quantity;
             TotalAmountWithDiscount += orderItemEntity.Quantity >= productEntity.DiscountMinimumProductCount
-                ? productEntity.Price * orderItemEntity.Quantity * (1 - productEntity.DiscountPercentage / 100 ?? throw new Exception())
+                ? productEntity.Price * orderItemEntity.Quantity * (1 - productEntity.DiscountPercentage / 100 ?? throw new InvalidOperationException("Discounted product discount is null"))
                 : productEntity.Price * orderItemEntity.Quantity;
         }
 
         ProductDiscountReportResponse response = new ProductDiscountReportResponse()
         {
             Name = productEntity.Name,
-            Discount = productEntity.DiscountPercentage ?? throw new Exception(),
+            Discount = productEntity.DiscountPercentage ?? throw new InvalidOperationException("Discounted product discount is null"),
             NumberOfOrders = productEntity.OrderItems.Count,
             TotalAmountWithoutDiscount = TotalAmountWithoutDiscount,
             TotalAmountWithDiscount = TotalAmountWithDiscount,

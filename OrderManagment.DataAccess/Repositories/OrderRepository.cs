@@ -22,7 +22,7 @@ public class OrderRepository : IOrderRepository
         return context.Orders
             .Include(o => o.Items)
                 .ThenInclude(item => item.Product)
-            .SingleOrDefault(o => o.Id == order.Id) ?? throw new Exception();
+            .SingleOrDefault(o => o.Id == order.Id) ?? throw new InvalidOperationException("Failed to fetch the created order from DB");
     }
 
     public ICollection<OrderEntity> RetrieveAllOrders()

@@ -38,7 +38,7 @@ public class OrderService : IOrderService
 
     public OrderInvoiceResponse GetOrderInvoice(int OrderId)
     {
-        OrderEntity orderEntity = orderRepository.RetrieveOrder(OrderId) ?? throw new KeyNotFoundException();
+        OrderEntity orderEntity = orderRepository.RetrieveOrder(OrderId) ?? throw new KeyNotFoundException($"Order with id {OrderId} was not found");
         ICollection<OrderInvoiceOrderItemResponse> orderInvoiceOrderItemResponses = new Collection<OrderInvoiceOrderItemResponse>();
         decimal OrderAmount = 0;
         foreach (OrderItemEntity itemEntity in orderEntity.Items)
@@ -52,7 +52,7 @@ public class OrderService : IOrderService
 
             if (itemEntity.Quantity >= itemEntity.Product.DiscountMinimumProductCount)
             {
-                orderItemResponse.Discount = itemEntity.Product.DiscountPercentage ?? throw new Exception();
+                orderItemResponse.Discount = itemEntity.Product.DiscountPercentage ?? throw new InvalidOperationException("Discounted product discount is null");
             }
 
             OrderAmount += (decimal)(orderItemResponse.Discount != null

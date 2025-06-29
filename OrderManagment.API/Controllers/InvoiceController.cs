@@ -21,9 +21,9 @@ public class InvoiceController : ControllerBase
         {
             return BadRequest();
         }
-        
-        OrderInvoiceResponse response = orderService.GetOrderInvoice(id);
 
+        OrderInvoiceResponse response = orderService.GetOrderInvoice(id);
+        
         return Ok(response);
     }
 }

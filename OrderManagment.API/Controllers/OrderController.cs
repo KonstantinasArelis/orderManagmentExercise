@@ -21,10 +21,11 @@ public class OrderController : ControllerBase
     {
         if (!ModelState.IsValid)
         {
-            return BadRequest();
+            return BadRequest("Invalid Order Model");
         }
 
         CreateOrderResponse response = orderService.CreateOrder(request);
+
         return CreatedAtAction(nameof(CreateOrder), new { Id = response.Id }, response);
     }
 
