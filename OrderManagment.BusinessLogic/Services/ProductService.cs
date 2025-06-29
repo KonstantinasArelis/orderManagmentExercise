@@ -3,6 +3,7 @@ using AutoMapper;
 using OrderManagment.BusinessLogic.Interfaces;
 using OrderManagment.Contracts.Discount;
 using OrderManagment.Contracts.Product;
+using OrderManagment.Contracts.Report;
 using OrderManagment.DataAccess.Entities;
 using OrderManagment.DataAccess.Interfaces;
 
@@ -47,25 +48,61 @@ public class ProductService : IProductService
         return mapper.Map<ApplyDiscountResponse>(productRepository.GetProduct(productId));
     }
 
-    // public ProductDiscountReportResponse GetProductDiscountReport()
-    // {
-    //     ICollection<ProductEntity> discountedProducts = productRepository.RetrieveDiscountedProducts();
-    //     ICollection<ProductDiscountReportResponse> reports = new Collection<ProductDiscountReportResponse>();
+    public ICollection<ProductDiscountReportResponse> GetProductDiscountReport()
+    {
+        ICollection<ProductEntity> discountedProducts = productRepository.RetrieveDiscountedProducts();
+        ICollection<ProductDiscountReportResponse> reports = new Collection<ProductDiscountReportResponse>();
 
-    //     foreach (ProductEntity entity in discountedProducts)
-    //     {
-    //         reports.Add(
-    //             new ProductDiscountReportResponse()
-    //             {
-    //                 Name = entity.Name,
-    //                 Discount = entity.DiscountPercentage ?? throw new Exception(),
+        foreach (ProductEntity productEntity in discountedProducts)
+            {
+                decimal TotalAmountWithoutDiscount = 0;
+                decimal TotalAmountWithDiscount = 0;
 
-    //             }
-    //         )
-    //     }
-    // }
+                foreach (OrderItemEntity orderItemEntity in productEntity.OrderItems)
+                {
+                    TotalAmountWithoutDiscount += productEntity.Price * orderItemEntity.Quantity;
+                    TotalAmountWithDiscount += orderItemEntity.Quantity >= productEntity.DiscountMinimumProductCount
+                        ? productEntity.Price * orderItemEntity.Quantity * (1 - productEntity.DiscountPercentage / 100 ?? throw new Exception())
+                        : productEntity.Price * orderItemEntity.Quantity;
+                }
 
-    // public ProductDiscountReportResponse GetProductDiscountReport(int productId)
-    // {
-    // }
+                reports.Add(
+                    new ProductDiscountReportResponse()
+                    {
+                        Name = productEntity.Name,
+                        Discount = productEntity.DiscountPercentage ?? throw new Exception(),
+                        NumberOfOrders = productEntity.OrderItems.Count,
+                        TotalAmountWithoutDiscount = TotalAmountWithoutDiscount,
+                        TotalAmountWithDiscount = TotalAmountWithDiscount,
+                    }
+                );
+            }
+
+        return reports;
+    }
+
+    public ProductDiscountReportResponse GetProductDiscountReport(int productId)
+    {
+        ProductEntity productEntity = productRepository.GetProduct(productId) ?? throw new KeyNotFoundException();
+        decimal TotalAmountWithoutDiscount = 0;
+        decimal TotalAmountWithDiscount = 0;
+        foreach (OrderItemEntity orderItemEntity in productEntity.OrderItems)
+        {
+            TotalAmountWithoutDiscount += productEntity.Price * orderItemEntity.Quantity;
+            TotalAmountWithDiscount += orderItemEntity.Quantity >= productEntity.DiscountMinimumProductCount
+                ? productEntity.Price * orderItemEntity.Quantity * (1 - productEntity.DiscountPercentage / 100 ?? throw new Exception())
+                : productEntity.Price * orderItemEntity.Quantity;
+        }
+        
+        ProductDiscountReportResponse response = new ProductDiscountReportResponse()
+        {
+            Name = productEntity.Name,
+            Discount = productEntity.DiscountPercentage ?? throw new Exception(),
+            NumberOfOrders = productEntity.OrderItems.Count,
+            TotalAmountWithoutDiscount = TotalAmountWithoutDiscount,
+            TotalAmountWithDiscount = TotalAmountWithDiscount,
+        };
+
+        return response;
+    }
 }

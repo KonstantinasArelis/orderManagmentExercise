@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using OrderManagment.DataAccess.Context;
 using OrderManagment.DataAccess.Entities;
 using OrderManagment.DataAccess.Interfaces;
@@ -32,7 +33,9 @@ public class ProductRepository : IProductRepository
 
     public ProductEntity? GetProduct(int id)
     {
-        return context.Products.FirstOrDefault(p => p.Id == id);
+        return context.Products
+            .Include(p => p.OrderItems)
+            .FirstOrDefault(p => p.Id == id);
     }
 
     public void UpdateProduct(ProductEntity product)
@@ -43,6 +46,11 @@ public class ProductRepository : IProductRepository
 
     public ICollection<ProductEntity> RetrieveDiscountedProducts()
     {
-        throw new NotImplementedException();
+        ICollection<ProductEntity> discountedProducts = context.Products
+            .Where(p => p.DiscountPercentage != null)
+            .Include(p => p.OrderItems)
+            .ToList();
+
+        return discountedProducts;
     }
 }
