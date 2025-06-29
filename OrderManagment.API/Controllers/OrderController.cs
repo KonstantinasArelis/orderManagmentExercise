@@ -35,17 +35,4 @@ public class OrderController : ControllerBase
 
         return Ok(responses);
     }
-
-    [HttpGet("invoice/{id}")]
-    public IActionResult GetOrderInvoice([FromRoute] int id)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest();
-        }
-
-        OrderInvoiceResponse response = orderService.GetOrderInvoice(id);
-
-        return Ok(response);
-    }
 }

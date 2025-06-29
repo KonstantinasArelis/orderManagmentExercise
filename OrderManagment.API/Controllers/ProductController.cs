@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OrderManagment.BusinessLogic.Interfaces;
-using OrderManagment.BusinessLogic.Service;
 using OrderManagment.Contracts.Discount;
 using OrderManagment.Contracts.Product;
-using OrderManagment.Contracts.Report;
 
 namespace OrderManagment.API.Controllers;
 
@@ -51,25 +49,6 @@ public class ProductController : ControllerBase
         }
 
         ApplyDiscountResponse response = productService.ApplyDiscount(id, request);
-        return Ok(response);
-    }
-
-    [HttpGet("discountReport")]
-    public IActionResult GetDiscountedProductReport()
-    {
-        ICollection<ProductDiscountReportResponse> responses = productService.GetProductDiscountReport();
-        return Ok(responses);
-    }
-
-    [HttpGet("discountReport/{id}")]
-    public IActionResult GetDiscountedProductReport([FromRoute] int id)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest();
-        }
-
-        ProductDiscountReportResponse response = productService.GetProductDiscountReport(id);
         return Ok(response);
     }
 }
