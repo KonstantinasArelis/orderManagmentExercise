@@ -28,27 +28,27 @@ public class ProductController : ControllerBase
         return CreatedAtAction(nameof(CreateProduct), new { id = response.Id }, response);
     }
 
-    [HttpGet("search/{name}")]
-    public IActionResult SearchProducts([FromRoute] String name)
+    [HttpGet("search/{productName}")]
+    public IActionResult SearchProducts([FromRoute] string productName)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest();
         }
 
-        ICollection<RetrieveProductResponse> responses = productService.GetProducts(name);
+        ICollection<RetrieveProductResponse> responses = productService.GetProducts(productName);
         return Ok(responses);
     }
 
-    [HttpPost("applyDiscount/{id}")]
-    public IActionResult ApplyDiscount([FromRoute] int id, [FromBody] ApplyDiscountRequest request)
+    [HttpPost("applyDiscount/{productId}")]
+    public IActionResult ApplyDiscount([FromRoute] int productId, [FromBody] ApplyDiscountRequest request)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest();
         }
 
-        ApplyDiscountResponse response = productService.ApplyDiscount(id, request);
+        ApplyDiscountResponse response = productService.ApplyDiscount(productId, request);
         return Ok(response);
     }
 }

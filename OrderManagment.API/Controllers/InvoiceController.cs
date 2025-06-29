@@ -14,15 +14,15 @@ public class InvoiceController : ControllerBase
         this.orderService = orderService;
     }
 
-    [HttpGet("{id}")]
-    public IActionResult GetOrderInvoice([FromRoute] int id)
+    [HttpGet("{orderId}")]
+    public IActionResult GetOrderInvoice([FromRoute] int orderId)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest();
         }
 
-        OrderInvoiceResponse response = orderService.GetOrderInvoice(id);
+        OrderInvoiceResponse response = orderService.GetOrderInvoice(orderId);
         
         return Ok(response);
     }

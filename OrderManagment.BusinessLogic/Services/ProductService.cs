@@ -53,11 +53,13 @@ public class ProductService : IProductService
         ICollection<ProductEntity> discountedProducts = productRepository.RetrieveDiscountedProducts();
         ICollection<ProductDiscountReportResponse> reports = new Collection<ProductDiscountReportResponse>();
 
+        // Loop through all products and generate a report for each one
         foreach (ProductEntity productEntity in discountedProducts)
         {
             decimal TotalAmountWithoutDiscount = 0;
             decimal TotalAmountWithDiscount = 0;
 
+            // Calculate the totals with and without discount
             foreach (OrderItemEntity orderItemEntity in productEntity.OrderItems)
             {
                 TotalAmountWithoutDiscount += productEntity.Price * orderItemEntity.Quantity;
@@ -86,6 +88,8 @@ public class ProductService : IProductService
         ProductEntity productEntity = productRepository.GetProduct(productId) ?? throw new KeyNotFoundException($"Product with id {productId} was not found");
         decimal TotalAmountWithoutDiscount = 0;
         decimal TotalAmountWithDiscount = 0;
+
+        // Calculate the totals with and without discount
         foreach (OrderItemEntity orderItemEntity in productEntity.OrderItems)
         {
             TotalAmountWithoutDiscount += productEntity.Price * orderItemEntity.Quantity;
@@ -94,6 +98,7 @@ public class ProductService : IProductService
                 : productEntity.Price * orderItemEntity.Quantity;
         }
 
+        // Generate report
         ProductDiscountReportResponse response = new ProductDiscountReportResponse()
         {
             Name = productEntity.Name,

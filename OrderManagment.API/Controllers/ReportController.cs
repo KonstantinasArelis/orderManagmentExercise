@@ -21,15 +21,15 @@ public class ReportController : ControllerBase
         return Ok(responses);
     }
 
-    [HttpGet("discountReport/{id}")]
-    public IActionResult GetDiscountedProductReport([FromRoute] int id)
+    [HttpGet("discountReport/{productId}")]
+    public IActionResult GetDiscountedProductReport([FromRoute] int productId)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest();
         }
 
-        ProductDiscountReportResponse response = productService.GetProductDiscountReport(id);
+        ProductDiscountReportResponse response = productService.GetProductDiscountReport(productId);
         return Ok(response);
     }
 }

@@ -33,11 +33,6 @@ public class OrderRepository : IOrderRepository
             .ToList();
     }
 
-    public ICollection<OrderEntity> RetrieveOrdersWithProduct(ProductEntity product)
-    {
-        throw new NotImplementedException();
-    }
-
     public OrderEntity? RetrieveOrder(int orderId)
     {
         return context.Orders

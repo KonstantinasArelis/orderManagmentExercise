@@ -49,12 +49,14 @@ public class OrderService : IOrderService
                 Quantity = itemEntity.Quantity,
                 Amount = itemEntity.Quantity * itemEntity.Product.Price,
             };
-
+            
+            // Assign discount if needed
             if (itemEntity.Quantity >= itemEntity.Product.DiscountMinimumProductCount)
             {
                 orderItemResponse.Discount = itemEntity.Product.DiscountPercentage ?? throw new InvalidOperationException("Discounted product discount is null");
             }
 
+            // Calculate total, use discount if needed
             OrderAmount += (decimal)(orderItemResponse.Discount != null
                 ? orderItemResponse.Amount * (1 - orderItemResponse.Discount / 100)
                 : orderItemResponse.Amount);
