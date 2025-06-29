@@ -27,7 +27,10 @@ public class OrderRepository : IOrderRepository
 
     public ICollection<OrderEntity> RetrieveAllOrders()
     {
-        throw new NotImplementedException();
+        return context.Orders
+            .Include(o => o.Items)
+                .ThenInclude(item => item.Product)
+            .ToList();
     }
 
     public ICollection<OrderEntity> RetrieveOrdersWithProduct(ProductEntity product)

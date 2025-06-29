@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using AutoMapper;
 using OrderManagment.BusinessLogic.Interfaces;
 using OrderManagment.Contracts.Invoice;
@@ -24,9 +25,15 @@ public class OrderService : IOrderService
         return mapper.Map<CreateOrderResponse>(orderRepository.SaveOrder(order));
     }
 
-    public List<RetrieveOrderResponse> RetrieveOrders()
+    public ICollection<RetrieveOrderResponse> RetrieveOrders()
     {
-        throw new NotImplementedException();
+        ICollection<OrderEntity> orderEntities = orderRepository.RetrieveAllOrders();
+        ICollection<RetrieveOrderResponse> orderResponses = new Collection<RetrieveOrderResponse>();
+        foreach (OrderEntity orderEntity in orderEntities)
+        {
+            orderResponses.Add(mapper.Map<RetrieveOrderResponse>(orderEntity));
+        }
+        return orderResponses;
     }
 
     public InvoiceDto GetOrderInvoice(int OrderId)

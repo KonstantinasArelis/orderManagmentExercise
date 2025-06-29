@@ -26,4 +26,12 @@ public class OrderController : ControllerBase
         CreateOrderResponse response = orderService.CreateOrder(request);
         return CreatedAtAction(nameof(CreateOrder), new { Id = response.Id }, response);
     }
+
+    [HttpGet]
+    public IActionResult RetrieveAllOrders()
+    {
+        ICollection<RetrieveOrderResponse> responses = orderService.RetrieveOrders();
+
+        return Ok(responses);
+    }
 }
