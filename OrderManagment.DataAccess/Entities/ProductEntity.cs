@@ -16,4 +16,6 @@ public class ProductEntity
     public decimal? DiscountPercentage { get; set; }
 
     public int? DiscountMinimumProductCount { get; set; }
+
+    public required ICollection<OrderItemEntity> OrderItems { get; set; }
 }

@@ -1,11 +1,12 @@
 using System.Collections.ObjectModel;
 using AutoMapper;
+using OrderManagment.BusinessLogic.Interfaces;
 using OrderManagment.Contracts.Discount;
 using OrderManagment.Contracts.Product;
 using OrderManagment.DataAccess.Entities;
 using OrderManagment.DataAccess.Interfaces;
 
-namespace OrderManagment.BusinessLogic.Interfaces;
+namespace OrderManagment.BusinessLogic.Service;
 
 public class ProductService : IProductService
 {
@@ -45,4 +46,26 @@ public class ProductService : IProductService
         productRepository.UpdateProduct(product);
         return mapper.Map<ApplyDiscountResponse>(productRepository.GetProduct(productId));
     }
+
+    // public ProductDiscountReportResponse GetProductDiscountReport()
+    // {
+    //     ICollection<ProductEntity> discountedProducts = productRepository.RetrieveDiscountedProducts();
+    //     ICollection<ProductDiscountReportResponse> reports = new Collection<ProductDiscountReportResponse>();
+
+    //     foreach (ProductEntity entity in discountedProducts)
+    //     {
+    //         reports.Add(
+    //             new ProductDiscountReportResponse()
+    //             {
+    //                 Name = entity.Name,
+    //                 Discount = entity.DiscountPercentage ?? throw new Exception(),
+
+    //             }
+    //         )
+    //     }
+    // }
+
+    // public ProductDiscountReportResponse GetProductDiscountReport(int productId)
+    // {
+    // }
 }

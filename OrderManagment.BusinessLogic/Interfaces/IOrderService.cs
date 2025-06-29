@@ -7,6 +7,6 @@ namespace OrderManagment.BusinessLogic.Interfaces;
 public interface IOrderService
 {
     public CreateOrderResponse CreateOrder(CreateOrderRequest request);
-    public List<OrderItemDto> RetrieveOrders();
+    public List<RetrieveOrderResponse> RetrieveOrders();
     public InvoiceDto GetOrderInvoice(int OrderId);
 }

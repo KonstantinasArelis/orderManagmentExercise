@@ -8,12 +8,8 @@ public class OrderManagmentDbContext : DbContext
     public OrderManagmentDbContext(DbContextOptions<OrderManagmentDbContext> options) : base(options)
     {
     }
-    
+
     public DbSet<ProductEntity> Products { get; set; }
     public DbSet<OrderEntity> Orders { get; set; }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
-    }
+    public DbSet<OrderItemEntity> OrderItems { get; set; }
 }
