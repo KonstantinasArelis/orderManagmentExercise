@@ -5,6 +5,7 @@ using OrderManagment.DataAccess.Interfaces;
 using OrderManagment.DataAccess.Repositories;
 using OrderManagment.BusinessLogic.Interfaces;
 using OrderManagment.BusinessLogic.Service;
+using OrderManagment.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +36,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapControllers();
 
