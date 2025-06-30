@@ -15,21 +15,21 @@ public class ReportController : ControllerBase
     }
 
     [HttpGet("discountReport")]
-    public IActionResult GetDiscountedProductReport()
+    public async Task<IActionResult> GetDiscountedProductReportAsync()
     {
-        ICollection<ProductDiscountReportResponse> responses = productService.GetProductDiscountReport();
+        ICollection<ProductDiscountReportResponse> responses = await productService.GetProductDiscountReportAsync();
         return Ok(responses);
     }
 
     [HttpGet("discountReport/{productId}")]
-    public IActionResult GetDiscountedProductReport([FromRoute] int productId)
+    public async Task<IActionResult> GetDiscountedProductReportAsync([FromRoute] int productId)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest();
         }
 
-        ProductDiscountReportResponse response = productService.GetProductDiscountReport(productId);
+        ProductDiscountReportResponse response = await productService.GetProductDiscountReportAsync(productId);
         return Ok(response);
     }
 }

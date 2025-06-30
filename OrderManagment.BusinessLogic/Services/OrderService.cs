@@ -19,15 +19,15 @@ public class OrderService : IOrderService
         this.mapper = mapper;
     }
 
-    public CreateOrderResponse CreateOrder(CreateOrderRequest request)
+    public async Task<CreateOrderResponse> CreateOrderAsync(CreateOrderRequest request)
     {
         OrderEntity order = mapper.Map<OrderEntity>(request);
-        return mapper.Map<CreateOrderResponse>(orderRepository.SaveOrder(order));
+        return mapper.Map<CreateOrderResponse>(await orderRepository.SaveOrderAsync(order));
     }
 
-    public ICollection<RetrieveOrderResponse> RetrieveOrders()
+    public async Task<ICollection<RetrieveOrderResponse>> RetrieveOrdersAsync()
     {
-        ICollection<OrderEntity> orderEntities = orderRepository.RetrieveAllOrders();
+        ICollection<OrderEntity> orderEntities = await orderRepository.RetrieveAllOrdersAsync();
         ICollection<RetrieveOrderResponse> orderResponses = new Collection<RetrieveOrderResponse>();
         foreach (OrderEntity orderEntity in orderEntities)
         {
@@ -36,9 +36,9 @@ public class OrderService : IOrderService
         return orderResponses;
     }
 
-    public OrderInvoiceResponse GetOrderInvoice(int OrderId)
+    public async Task<OrderInvoiceResponse> GetOrderInvoiceAsync(int OrderId)
     {
-        OrderEntity orderEntity = orderRepository.RetrieveOrder(OrderId) ?? throw new KeyNotFoundException($"Order with id {OrderId} was not found");
+        OrderEntity orderEntity = await orderRepository.RetrieveOrderAsync(OrderId) ?? throw new KeyNotFoundException($"Order with id {OrderId} was not found");
         ICollection<OrderInvoiceOrderItemResponse> orderInvoiceOrderItemResponses = new Collection<OrderInvoiceOrderItemResponse>();
         decimal OrderAmount = 0;
         foreach (OrderItemEntity itemEntity in orderEntity.Items)

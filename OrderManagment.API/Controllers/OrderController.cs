@@ -17,22 +17,22 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult CreateOrder(CreateOrderRequest request)
+    public async Task<IActionResult> CreateOrderAsync(CreateOrderRequest request)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest("Invalid Order Model");
         }
 
-        CreateOrderResponse response = orderService.CreateOrder(request);
+        CreateOrderResponse response = await orderService.CreateOrderAsync(request);
 
-        return CreatedAtAction(nameof(CreateOrder), new { Id = response.Id }, response);
+        return Ok(response);
     }
 
     [HttpGet]
-    public IActionResult RetrieveAllOrders()
+    public async Task<IActionResult> RetrieveAllOrders()
     {
-        ICollection<RetrieveOrderResponse> responses = orderService.RetrieveOrders();
+        ICollection<RetrieveOrderResponse> responses = await orderService.RetrieveOrdersAsync();
 
         return Ok(responses);
     }

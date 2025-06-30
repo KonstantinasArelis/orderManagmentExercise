@@ -4,9 +4,9 @@ namespace OrderManagment.DataAccess.Interfaces;
 
 public interface IProductRepository
 {
-    public ProductEntity SaveProduct(ProductEntity product);
-    public ICollection<ProductEntity> RetrieveProducts(String productName);
-    public ICollection<ProductEntity> RetrieveDiscountedProducts();
-    public ProductEntity? GetProduct(int id);
-    public void UpdateProduct(ProductEntity product);
+    public Task<ProductEntity> SaveProductAsync(ProductEntity product);
+    public Task<ICollection<ProductEntity>> RetrieveProductsAsync(String productName);
+    public Task<ICollection<ProductEntity>> RetrieveDiscountedProductsAsync();
+    public Task<ProductEntity?> GetProductAsync(int id);
+    public Task UpdateProductAsync(ProductEntity product);
 }

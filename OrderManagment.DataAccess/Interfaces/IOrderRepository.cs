@@ -4,7 +4,7 @@ namespace OrderManagment.DataAccess.Interfaces;
 
 public interface IOrderRepository
 {
-    public OrderEntity SaveOrder(OrderEntity order);
-    public ICollection<OrderEntity> RetrieveAllOrders();
-    public OrderEntity RetrieveOrder(int orderId);
+    public Task<OrderEntity> SaveOrderAsync(OrderEntity order);
+    public Task<ICollection<OrderEntity>> RetrieveAllOrdersAsync();
+    public Task<OrderEntity> RetrieveOrderAsync(int orderId);
 }

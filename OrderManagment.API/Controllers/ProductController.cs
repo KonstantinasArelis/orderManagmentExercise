@@ -17,38 +17,38 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult CreateProduct([FromBody] CreateProductRequest request)
+    public async Task<IActionResult> CreateProductAsync([FromBody] CreateProductRequest request)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(request);
         }
 
-        CreateProductResponse response = productService.CreateProduct(request);
-        return CreatedAtAction(nameof(CreateProduct), new { id = response.Id }, response);
+        CreateProductResponse response = await productService.CreateProductAsync(request);
+        return Ok(response);
     }
 
     [HttpGet("search/{productName}")]
-    public IActionResult SearchProducts([FromRoute] string productName)
+    public async Task<IActionResult> SearchProductsAsync([FromRoute] string productName)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest();
         }
 
-        ICollection<RetrieveProductResponse> responses = productService.GetProducts(productName);
+        ICollection<RetrieveProductResponse> responses = await productService.GetProductsAsync(productName);
         return Ok(responses);
     }
 
     [HttpPost("applyDiscount/{productId}")]
-    public IActionResult ApplyDiscount([FromRoute] int productId, [FromBody] ApplyDiscountRequest request)
+    public async Task<IActionResult> ApplyDiscountAsync([FromRoute] int productId, [FromBody] ApplyDiscountRequest request)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest();
         }
 
-        ApplyDiscountResponse response = productService.ApplyDiscount(productId, request);
+        ApplyDiscountResponse response = await productService.ApplyDiscountAsync(productId, request);
         return Ok(response);
     }
 }

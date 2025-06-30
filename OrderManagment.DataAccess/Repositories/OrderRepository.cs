@@ -14,31 +14,31 @@ public class OrderRepository : IOrderRepository
         this.context = context;
     }
 
-    public OrderEntity SaveOrder(OrderEntity order)
+    public async Task<OrderEntity> SaveOrderAsync(OrderEntity order)
     {
         context.Orders.Add(order);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
-        return context.Orders
+        return await context.Orders
             .Include(o => o.Items)
                 .ThenInclude(item => item.Product)
-            .SingleOrDefault(o => o.Id == order.Id) ?? throw new InvalidOperationException("Failed to fetch the created order from DB");
+            .SingleOrDefaultAsync(o => o.Id == order.Id) ?? throw new InvalidOperationException("Failed to fetch the created order from DB");
     }
 
-    public ICollection<OrderEntity> RetrieveAllOrders()
+    public async Task<ICollection<OrderEntity>> RetrieveAllOrdersAsync()
     {
-        return context.Orders
+        return await context.Orders
             .Include(o => o.Items)
                 .ThenInclude(item => item.Product)
-            .ToList();
+            .ToListAsync();
     }
 
-    public OrderEntity? RetrieveOrder(int orderId)
+    public async Task<OrderEntity?> RetrieveOrderAsync(int orderId)
     {
-        return context.Orders
+        return await context.Orders
             .Where(o => o.Id == orderId)
             .Include(o => o.Items)
                 .ThenInclude(item => item.Product)
-            .FirstOrDefault();
+            .FirstOrDefaultAsync();
     }
 }

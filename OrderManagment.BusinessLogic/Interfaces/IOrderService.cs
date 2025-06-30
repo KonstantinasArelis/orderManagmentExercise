@@ -6,7 +6,7 @@ namespace OrderManagment.BusinessLogic.Interfaces;
 
 public interface IOrderService
 {
-    public CreateOrderResponse CreateOrder(CreateOrderRequest request);
-    public ICollection<RetrieveOrderResponse> RetrieveOrders();
-    public OrderInvoiceResponse GetOrderInvoice(int OrderId);
+    public Task<CreateOrderResponse> CreateOrderAsync(CreateOrderRequest request);
+    public Task<ICollection<RetrieveOrderResponse>> RetrieveOrdersAsync();
+    public Task<OrderInvoiceResponse> GetOrderInvoiceAsync(int OrderId);
 }

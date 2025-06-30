@@ -15,14 +15,14 @@ public class InvoiceController : ControllerBase
     }
 
     [HttpGet("{orderId}")]
-    public IActionResult GetOrderInvoice([FromRoute] int orderId)
+    public async Task<IActionResult> GetOrderInvoiceAsync([FromRoute] int orderId)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest();
         }
 
-        OrderInvoiceResponse response = orderService.GetOrderInvoice(orderId);
+        OrderInvoiceResponse response = await orderService.GetOrderInvoiceAsync(orderId);
         
         return Ok(response);
     }

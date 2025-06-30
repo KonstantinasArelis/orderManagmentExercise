@@ -14,42 +14,42 @@ public class ProductRepository : IProductRepository
         this.context = context;
     }
 
-    public ProductEntity SaveProduct(ProductEntity product)
+    public async Task<ProductEntity> SaveProductAsync(ProductEntity product)
     {
         context.Products.Add(product);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
         return product;
     }
 
-    public ICollection<ProductEntity> RetrieveProducts(String productName)
+    public async Task<ICollection<ProductEntity>> RetrieveProductsAsync(string productName)
     {
-        ICollection<ProductEntity> products = context.Products
+        ICollection<ProductEntity> products = await context.Products
             .Where(p => p.Name.Contains(productName))
-            .ToList();
+            .ToListAsync();
 
         return products;
     }
 
-    public ProductEntity? GetProduct(int id)
+    public async Task<ProductEntity?> GetProductAsync(int id)
     {
-        return context.Products
+        return await context.Products
             .Include(p => p.OrderItems)
-            .FirstOrDefault(p => p.Id == id);
+            .FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public void UpdateProduct(ProductEntity product)
+    public async Task UpdateProductAsync(ProductEntity product)
     {
         context.Update(product);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public ICollection<ProductEntity> RetrieveDiscountedProducts()
+    public async Task<ICollection<ProductEntity>> RetrieveDiscountedProductsAsync()
     {
-        ICollection<ProductEntity> discountedProducts = context.Products
+        ICollection<ProductEntity> discountedProducts = await context.Products
             .Where(p => p.DiscountPercentage != null)
             .Include(p => p.OrderItems)
-            .ToList();
+            .ToListAsync();
 
         return discountedProducts;
     }

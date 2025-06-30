@@ -20,16 +20,16 @@ public class ProductService : IProductService
         this.mapper = mapper;
     }
 
-    public CreateProductResponse CreateProduct(CreateProductRequest request)
+    public async Task<CreateProductResponse> CreateProductAsync(CreateProductRequest request)
     {
         ProductEntity newProduct = mapper.Map<ProductEntity>(request);
-        ProductEntity createdProduct = productRepository.SaveProduct(newProduct);
+        ProductEntity createdProduct = await productRepository.SaveProductAsync(newProduct);
         return mapper.Map<CreateProductResponse>(createdProduct);
     }
 
-    public ICollection<RetrieveProductResponse> GetProducts(String productName)
+    public async Task<ICollection<RetrieveProductResponse>> GetProductsAsync(String productName)
     {
-        ICollection<ProductEntity> productEntities = productRepository.RetrieveProducts(productName);
+        ICollection<ProductEntity> productEntities = await productRepository.RetrieveProductsAsync(productName);
         ICollection<RetrieveProductResponse> productResponses = new Collection<RetrieveProductResponse>();
         foreach (ProductEntity productEntity in productEntities)
         {
@@ -38,19 +38,19 @@ public class ProductService : IProductService
         return productResponses;
     }
 
-    public ApplyDiscountResponse ApplyDiscount(int productId, ApplyDiscountRequest request)
+    public async Task<ApplyDiscountResponse> ApplyDiscountAsync(int productId, ApplyDiscountRequest request)
     {
-        ProductEntity product = productRepository.GetProduct(productId) ?? throw new KeyNotFoundException($"Product with id {productId} was not found");
+        ProductEntity product = await productRepository.GetProductAsync(productId) ?? throw new KeyNotFoundException($"Product with id {productId} was not found");
         product.DiscountMinimumProductCount = request.DiscountMinimumProductCount;
         product.DiscountPercentage = request.DiscountPercentage;
 
-        productRepository.UpdateProduct(product);
-        return mapper.Map<ApplyDiscountResponse>(productRepository.GetProduct(productId));
+        await productRepository.UpdateProductAsync(product);
+        return mapper.Map<ApplyDiscountResponse>(await productRepository.GetProductAsync(productId));
     }
 
-    public ICollection<ProductDiscountReportResponse> GetProductDiscountReport()
+    public async Task<ICollection<ProductDiscountReportResponse>> GetProductDiscountReportAsync()
     {
-        ICollection<ProductEntity> discountedProducts = productRepository.RetrieveDiscountedProducts();
+        ICollection<ProductEntity> discountedProducts = await productRepository.RetrieveDiscountedProductsAsync();
         ICollection<ProductDiscountReportResponse> reports = new Collection<ProductDiscountReportResponse>();
 
         // Loop through all products and generate a report for each one
@@ -83,9 +83,9 @@ public class ProductService : IProductService
         return reports;
     }
 
-    public ProductDiscountReportResponse GetProductDiscountReport(int productId)
+    public async Task<ProductDiscountReportResponse> GetProductDiscountReportAsync(int productId)
     {
-        ProductEntity productEntity = productRepository.GetProduct(productId) ?? throw new KeyNotFoundException($"Product with id {productId} was not found");
+        ProductEntity productEntity = await productRepository.GetProductAsync(productId) ?? throw new KeyNotFoundException($"Product with id {productId} was not found");
         decimal TotalAmountWithoutDiscount = 0;
         decimal TotalAmountWithDiscount = 0;
 
