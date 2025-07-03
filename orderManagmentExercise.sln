@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderManagment.BusinessLogi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderManagment.Contracts", "OrderManagment.Contracts\OrderManagment.Contracts.csproj", "{633D077A-A344-46D2-86B9-6571D9A2253F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderManagment.Tests", "OrderManagment.Tests\OrderManagment.Tests.csproj", "{A6E3BC41-F8B5-45E4-AB57-2E41CC963923}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{633D077A-A344-46D2-86B9-6571D9A2253F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{633D077A-A344-46D2-86B9-6571D9A2253F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{633D077A-A344-46D2-86B9-6571D9A2253F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6E3BC41-F8B5-45E4-AB57-2E41CC963923}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6E3BC41-F8B5-45E4-AB57-2E41CC963923}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6E3BC41-F8B5-45E4-AB57-2E41CC963923}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6E3BC41-F8B5-45E4-AB57-2E41CC963923}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
