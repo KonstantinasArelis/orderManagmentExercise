@@ -33,7 +33,7 @@ if (Uri.TryCreate(connectionString, UriKind.Absolute, out var uri) && uri.Scheme
     var user = userInfo[0];
     var password = userInfo[1];
     var host = uri.Host;
-    var port = uri.Port;
+    var port = uri.Port == -1 ? 5432 : uri.Port;
     var database = uri.LocalPath.TrimStart('/');
     
     // Convert the URL to the standard format
