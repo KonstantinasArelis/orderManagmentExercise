@@ -23,10 +23,28 @@ builder.Services.AddTransient<IOrderService, OrderService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<OrderManagmentDbContext>(Options =>
-    Options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+// Check if the connection string is a URL from Render
+if (Uri.TryCreate(connectionString, UriKind.Absolute, out var uri) && uri.Scheme.StartsWith("postgres"))
+{
+    var userInfo = uri.UserInfo.Split(':');
+    var user = userInfo[0];
+    var password = userInfo[1];
+    var host = uri.Host;
+    var port = uri.Port;
+    var database = uri.LocalPath.TrimStart('/');
+    
+    // Convert the URL to the standard format
+    connectionString = $"Host={host};Port={port};Database={database};Username={user};Password={password};";
+}
+
+builder.Services.AddDbContext<OrderManagmentDbContext>(options =>
+    options.UseNpgsql(connectionString));
 
 var app = builder.Build();
+
 
 using (var scope = app.Services.CreateScope())
 {
@@ -40,7 +58,7 @@ using (var scope = app.Services.CreateScope())
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
         logger.LogError(ex, "An error occurred while migrating the database.");
-        throw; 
+        throw;
     }
 }
 
