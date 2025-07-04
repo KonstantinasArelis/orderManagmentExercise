@@ -60,7 +60,9 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/order-management-exercise-api:${{ github.sha }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/order-management-exercise-api:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/order-management-exercise-api:latest
 
       - name: Trigger Render Deploy
         run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
