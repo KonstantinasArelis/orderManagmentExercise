@@ -27,8 +27,11 @@ Solution uses dotnet 8.
 5. Project has commit history.
 6. Project has comments in more complex places.
 
-Unfortunetly I was not able to complete in time:
+## Post Deadline
+1. Added CI/CD:
+   1. CI and containerization via github actions and docker. Docker image: `konstantinasarelis/order-management-exercise-api:latest`
+   2. CD via Render. Try it out: `https://order-management-exercise-api.onrender.com/swagger/index.html`. You may encounter up to a minute delay for first request.
+
+## Project Is Missing
 1. Automated tests
-2. Containerization/deployment
-3. Continuous integration
-4. GraphQL endpoint
+2. GraphQL endpoint
